@@ -1,0 +1,67 @@
+use Company;
+
+CREATE TABLE Visits(user_id int, visit_date date);
+
+INSERT INTO Visits values
+(1, '2020-01-01'),
+(2, '2020-01-02'),
+(12,'2020-01-01'),
+(19,'2020-01-03'),
+(1, '2020-01-02'),
+(2, '2020-01-03'),
+(1, '2020-01-04'),
+(7, '2020-01-11'),
+(9, '2020-01-25'),
+(8, '2020-01-28');
+
+select * from Visits;
+
+CREATE TABLE Transactions(user_id int, transaction_date date, amount int);
+
+INSERT INTO Transactions VALUES
+(1,'2020-01-02',120),
+(2,'2020-01-03',22),
+(7,'2020-01-11',232),
+(1,'2020-01-04',7),
+(9,'2020-01-25',33),
+(9,'2020-01-25',66),
+(8,'2020-01-28',1),
+(9,'2020-01-25',99);
+
+select * from Transactions;
+
+-- 1. Max user visit date
+
+SELECT count(*) AS Visited_count, visit_date
+FROM Visits
+GROUP BY visit_date;
+
+-- 2. Max amount transaction at a date
+
+SELECT sum(amount) AS Amount_transaction_in_single_date , transaction_date 
+FROM Transactions 
+GROUP BY transaction_date
+ORDER BY Amount_transaction_in_single_date DESC;
+
+-- 3. User with max transaction amount
+
+SELECT sum(amount) AS User_with_max_tran_amt , user_id 
+FROM Transactions 
+GROUP BY user_id
+ORDER BY User_with_max_tran_amt DESC;
+
+-- 4. Average transaction per day
+
+SELECT AVG(amount) AS avg_tran_amt , transaction_date 
+FROM Transactions 
+GROUP BY transaction_date
+ORDER BY avg_tran_amt DESC;
+
+-- 5. User visited but did not do a transaction
+
+SELECT * FROM Visits
+LEFT OUTER JOIN Transactions
+ON
+Visits.user_id = Transactions.user_id;
+
+
